@@ -1,4 +1,4 @@
-#include "stringa.hpp"
+#include "tools.hpp"
 
 void convertToLower(std::string &str){
     if (str.empty()) return;

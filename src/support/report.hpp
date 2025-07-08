@@ -12,7 +12,7 @@
 #include <sys/sysinfo.h>
 #include <unistd.h>
 
-#include "stringa.hpp"
+#include "tools.hpp"
 
 struct os
 {
@@ -21,17 +21,27 @@ struct os
     std::string type;
 };
 
+struct cpu
+{
+    std::string vendor_id;
+    std::string model_name; 
+    short int threads;
+    short int cores;
+};
+
 
 class report
 {
 private:
     os system;
+    cpu cpu_info;
     int os_package_count = -1;
     int flatpak_package_count = -1;
     int snap_package_count = -1;
 
     void findOs();
     void getPackages();
+    void getCpu();
 public:
     void steal();
     void printConsole();

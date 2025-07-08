@@ -1,5 +1,5 @@
-#ifndef STRINGA_HPP
-#define STRINGA_HPP
+#ifndef TOOLS_HPP
+#define TOOLS_HPP
 #include <string>
 
 void convertToLower(std::string &str);

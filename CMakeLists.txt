@@ -12,3 +12,10 @@ add_executable(FunFetch ${SRC_FILES})
 
 #include directories
 target_include_directories(FunFetch PRIVATE ${PROJECT_SOURCE_DIR}/src)
+
+# only on ARM (32-bit or 64-bit) force-include <algorithm>
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
+    target_compile_options(FunFetch PRIVATE
+        -include algorithm
+    )
+endif()
