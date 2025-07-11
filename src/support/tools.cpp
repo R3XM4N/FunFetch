@@ -51,3 +51,42 @@ void trimChar(std::string &str, char c){
         str.pop_back();
     }
 }
+
+string2 splitStringAtChar(std::string str, char c){
+    std::string front;
+    std::string back;
+    unsigned short int i = 0;
+    while (str[i] != c && !(str.size() - 1 < i))
+    {
+        front += str[i];
+        i++;
+    }
+    i++;
+    while (!(str.size() - 1 < i))
+    {
+        back += str[i];
+        i++;
+    }   
+
+    return {front, back};
+}
+
+std::unordered_map<std::string, std::string> fileToUMapGeneric(std::string file_path, char split_on){
+    std::unordered_map<std::string, std::string> u_map;
+
+    //std::ifstream input("/etc/os-release");
+    std::ifstream input(file_path);
+    if (!input) {std::cerr << "File at path \"" << file_path << "\" could not be opened." << "\n";}
+        
+    std::string line;
+    line.reserve(1024);
+
+    while (std::getline(input,line)){
+        string2 split;
+        split = splitStringAtChar(line, split_on);
+
+        u_map[split.x] = split.y;
+    }
+    
+    return u_map;
+}
