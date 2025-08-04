@@ -7,6 +7,8 @@
 #include <fstream>
 #include <vector>
 
+#include "support/tools.hpp"
+
 std::unordered_map<std::string, std::string> get_lscpu(); //                        lscpu
 std::vector<std::unordered_map<std::string, std::string>> get_cpu_info(); //        /proc/cpuinfo
 

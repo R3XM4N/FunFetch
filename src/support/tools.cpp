@@ -31,6 +31,28 @@ void cutAfterChar(std::string &str, char c){
     }
 }
 
+void cutLeadingChar(std::string &str, char c){
+    unsigned short int position = 0;
+    while (position < str.length())
+    {
+        if (str[position] != c) break;
+        position++;
+    }
+    str = str.substr(position);  
+}
+
+void cutTrailingChar(std::string &str, char c){
+    unsigned int position = str.length() - 1;
+    while (position > 0)
+    {
+        if (str[position] != c) break;
+        position--;
+    }
+    if (str.length() - 1 == position) return;
+    
+    str = str.substr(0, position + 1);  
+}
+
 std::string afterCharString(std::string str, char c){
     cutBeforeChar(str, c);
     return str;
@@ -67,7 +89,7 @@ string2 splitStringAtChar(std::string str, char c){
         back += str[i];
         i++;
     }   
-
+    cutLeadingChar(back, ' ');
     return {front, back};
 }
 
@@ -81,7 +103,7 @@ std::unordered_map<std::string, std::string> fileToUMapGeneric(std::string file_
     std::string line;
     line.reserve(1024);
 
-    while (std::getline(input,line)){
+    while (std::getline(input, line)){
         string2 split;
         split = splitStringAtChar(line, split_on);
 
@@ -89,4 +111,37 @@ std::unordered_map<std::string, std::string> fileToUMapGeneric(std::string file_
     }
     
     return u_map;
+}
+std::unordered_map<std::string, std::string> cmdToUMapGeneric(std::string cmd, char split_on){
+    std::unordered_map<std::string, std::string> u_map;
+    std::string data = executeCommand(cmd);
+    
+    std::istringstream iss(data);
+    std::string line;
+    line.reserve(1024);
+
+    while (std::getline(iss, line)){
+        string2 split;
+        split = splitStringAtChar(line, split_on);
+
+        u_map[split.x] = split.y;
+    }
+    
+    return u_map;
+}
+
+std::string executeCommand(std::string command){
+    char* buffer = new char[4096];
+    std::string ret_value;
+    FILE* pipe = popen(command.c_str(), "r");
+    if (!pipe) { delete[] buffer; return "COMMAND NONE (!pipe)";}
+    
+    while (fgets(buffer, 4096, pipe))
+    {
+        ret_value += buffer;
+    }
+    
+    pclose(pipe);
+    delete[] buffer;
+    return ret_value;
 }
