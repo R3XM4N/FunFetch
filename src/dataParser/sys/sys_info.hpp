@@ -1,5 +1,6 @@
-#ifndef OS_INFO_HPP
-#define OS_INFO_HPP
+
+#ifndef SYS_INFO_HPP
+#define SYS_INFO_HPP
 
 #include <unordered_map>
 #include <string>

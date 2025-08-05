@@ -42,6 +42,6 @@ std::unordered_map<std::string, std::string> fileToUMapGeneric(std::string file_
 std::unordered_map<std::string, std::string> cmdToUMapGeneric(std::string cmd, char split_on); 
 
 std::string executeCommand(std::string command);
-
+std::string readFile(std::string file_path);
 
 #endif

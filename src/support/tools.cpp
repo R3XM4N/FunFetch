@@ -97,13 +97,13 @@ std::unordered_map<std::string, std::string> fileToUMapGeneric(std::string file_
     std::unordered_map<std::string, std::string> u_map;
 
     //std::ifstream input("/etc/os-release");
-    std::ifstream input(file_path);
-    if (!input) {std::cerr << "File at path \"" << file_path << "\" could not be opened." << "\n";}
+    std::ifstream fstream(file_path);
+    if (!fstream) {std::cerr << "File at path \"" << file_path << "\" could not be opened." << "\n";}
         
     std::string line;
     line.reserve(1024);
 
-    while (std::getline(input, line)){
+    while (std::getline(fstream, line)){
         string2 split;
         split = splitStringAtChar(line, split_on);
 
@@ -112,6 +112,7 @@ std::unordered_map<std::string, std::string> fileToUMapGeneric(std::string file_
     
     return u_map;
 }
+
 std::unordered_map<std::string, std::string> cmdToUMapGeneric(std::string cmd, char split_on){
     std::unordered_map<std::string, std::string> u_map;
     std::string data = executeCommand(cmd);
@@ -140,8 +141,28 @@ std::string executeCommand(std::string command){
     {
         ret_value += buffer;
     }
-    
+
     pclose(pipe);
     delete[] buffer;
+    
+    auto not_found = ret_value.find("command not found");
+    if (not_found == std::string::npos)
+    {
+        return "INVALID";
+    }
     return ret_value;
+}
+
+std::string readFile(std::string file_path){
+    std::ifstream fstream(file_path);
+    if (!fstream) {std::cerr << "File at path \"" << file_path << "\" could not be opened." << "\n";}
+
+    std::string line;
+    std::string return_val;
+
+    while (std::getline(fstream, line)){
+        return_val += line;
+    }
+
+    return return_val;
 }
