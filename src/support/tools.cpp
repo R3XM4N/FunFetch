@@ -113,24 +113,6 @@ std::unordered_map<std::string, std::string> fileToUMapGeneric(std::string file_
     return u_map;
 }
 
-std::unordered_map<std::string, std::string> cmdToUMapGeneric(std::string cmd, char split_on){
-    std::unordered_map<std::string, std::string> u_map;
-    std::string data = executeCommand(cmd);
-    
-    std::istringstream iss(data);
-    std::string line;
-    line.reserve(1024);
-
-    while (std::getline(iss, line)){
-        string2 split;
-        split = splitStringAtChar(line, split_on);
-
-        u_map[split.x] = split.y;
-    }
-    
-    return u_map;
-}
-
 std::string executeCommand(std::string command){
     char* buffer = new char[4096];
     std::string ret_value;
@@ -144,14 +126,32 @@ std::string executeCommand(std::string command){
 
     pclose(pipe);
     delete[] buffer;
-    
+    // std::cout << ret_value << "/n";
     auto not_found = ret_value.find("command not found");
-    if (not_found == std::string::npos)
+    if (not_found != std::string::npos)
     {
         return "INVALID";
     }
     return ret_value;
 }
+
+std::unordered_map<std::string, std::string> cmdToUMapGeneric(std::string cmd, char split_on){
+    std::unordered_map<std::string, std::string> u_map;
+    std::string data = executeCommand(cmd);
+    
+    std::istringstream iss(data);
+    std::string line;
+    line.reserve(1024);
+
+    while (std::getline(iss, line)){
+        string2 split;
+        split = splitStringAtChar(line, split_on);
+        u_map[split.x] = split.y;
+    }
+    
+    return u_map;
+}
+
 
 std::string readFile(std::string file_path){
     std::ifstream fstream(file_path);
